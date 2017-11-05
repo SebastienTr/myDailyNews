@@ -1,0 +1,10 @@
+{
+	"name" :"My Daily News",
+	"version" :"0.1",
+	"manifest_version": 2,
+	"description" :"Tous les matins, lancez myDailyNews pour avoir un résumé des informations qu'il vous faut pour la journée.",
+	"browser_action" : {
+		"default_popup" :"popup.html",
+		"default_icon": "analytics.png"
+	}
+}

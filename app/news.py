@@ -9,137 +9,142 @@ from .audio import Player
 # TODO Un peux lours a loader pour si peux
 from bs4 import BeautifulSoup
 
+
 class News:
-	"""docstring for News"""
-	def __init__(self):
-		self.language = config.LANGUAGE
-		self.resume_len = config.NEWS_RESUME_LEN
-		self.websites = list()
+  """docstring for News"""
 
-	def getNews(self):
-		for title, website in config.NEWS_WEBSITES.items():
-			self.websites.append(Website(
-				title=title,
-				url=website['url'],
-				type=website['type']))
+  def __init__(self):
+    self.language = config.LANGUAGE
+    self.resume_len = config.NEWS_RESUME_LEN
+    self.websites = list()
 
-	def getNewsString(self):
-		self.resume = " ".join((
-			self.lemonde.echo(bprint=False),
-			self.nicematin.echo(bprint=False)))
+  def getNews(self):
+    for title, website in config.NEWS_WEBSITES.items():
+      self.websites.append(Website(
+          title=title,
+          url=website['url'],
+          type=website['type']))
 
-		return self.resume
+  def getNewsString(self):
+    self.resume = " ".join((
+        self.lemonde.echo(bprint=False),
+        self.nicematin.echo(bprint=False)))
 
-	def printNews(self):
-		for website in self.websites:
-			website.echo()
+    return self.resume
 
-	def play(self):
-		for website in self.websites:
-			website.play()
-			Player().wait(2)
+  def printNews(self):
+    for website in self.websites:
+      website.echo()
 
-	def getData(self):
-		data = {}
+  def play(self):
+    for website in self.websites:
+      website.play()
+      Player().wait(2)
 
-		for website in self.websites:
-			data[website.title] = website.getData()
+  def getData(self):
+    data = {}
 
-		return data
+    for website in self.websites:
+      data[website.title] = website.getData()
+
+    return data
+
 
 class Website:
-	"""docstring for Website"""
-	def __init__(self, url, title, type):
-		self.url = url
-		self.news = list()
-		self.title = title
-		self.type = type
+  """docstring for Website"""
 
-		self.loadRSS()
-		self.loadNews()
+  def __init__(self, url, title, type):
+    self.url = url
+    self.news = list()
+    self.title = title
+    self.type = type
 
-		self.player = Player()
+    self.loadRSS()
+    self.loadNews()
 
-	def loadRSS(self):
-		self.rss = feedparser.parse(self.url)
+    self.player = Player()
 
-	def getNews(self):
-		print (self.rss)
+  def loadRSS(self):
+    self.rss = feedparser.parse(self.url)
 
-	def echo(self, bprint=True):
-		head_str = self.getHeadStr()
+  def getNews(self):
+    print (self.rss)
 
-		if bprint is True:
-			print ("-- {}".format(head_str))
+  def echo(self, bprint=True):
+    head_str = self.getHeadStr()
 
-		total_str = head_str
-		i = 0
-		while i < len(self.news) and i < config.NEWS_RESUME_LEN:
-			total_str += ".\n" + self.news[i]['title']
-			if bprint is True:
-				print (self.news[i]['title'])
-				print ('\t{}'.format(self.news[i]['summary']))
-			i += 1
+    if bprint is True:
+      print ("-- {}".format(head_str))
 
-		if bprint is True:
-			print ("")
+    total_str = head_str
+    i = 0
+    while i < len(self.news) and i < config.NEWS_RESUME_LEN:
+      total_str += ".\n" + self.news[i]['title']
+      if bprint is True:
+        print (self.news[i]['title'])
+        print ('\t{}'.format(self.news[i]['summary']))
+      i += 1
 
-		return total_str
+    if bprint is True:
+      print ("")
 
-	def getData(self):
-		data = {
-			'head_str': self.getHeadStr(),
-			'content': list()
-		}
+    return total_str
 
-		for i, news in enumerate(self.news):
-			if i == config.NEWS_RESUME_LEN:
-				break
+  def getData(self):
+    data = {
+        'head_str': self.getHeadStr(),
+        'content': list()
+    }
 
-			# Extract pictures from the summary
-			summary_soup = BeautifulSoup(news['summary'])
-			for div in summary_soup.find_all("img"): 
-				div.decompose()
-			data['content'].append({
-				'title': news['title'],
-				'summary': str(summary_soup),
-				'link': news['link'],
-				'picture': news['picture'],
-			})
+    for i, news in enumerate(self.news):
+      if i == config.NEWS_RESUME_LEN:
+        break
 
-		return data
+      # Extract pictures from the summary
+      summary_soup = BeautifulSoup(news['summary'])
+      for div in summary_soup.find_all("img"):
+        div.decompose()
+      data['content'].append({
+          'title': news['title'],
+          'summary': str(summary_soup),
+          'link': news['link'],
+          'picture': news['picture'],
+      })
 
-	def getHeadStr(self):
-		return "Résumé des actualités {} avec {}.".format(
-			config.NEWS_TYPE[self.type.lower()],
-			self.title)
+    return data
+
+  def getHeadStr(self):
+    return "Résumé des actualités {} avec {}.".format(
+        config.NEWS_TYPE[self.type.lower()],
+        self.title)
+
+  def loadNews(self):
+    entries = self.rss['entries']
+    for entry in entries:
+      self.news.append({
+          'title': entry['title'],
+          'summary': entry['summary'],
+          'picture': self.getPicture(entry['links']),
+          'link': entry['link']})
+
+  def getPicture(self, links):
+    for link in links:
+      if 'image' in link['type'].split('/'):
+        return link['href']
+
+    # TODO : Default picture here
+    return None
+
+  def play(self):
+    self.player.play("Résumé des actualités publiés par {}".format(self.title))
+    self.player.wait(1)
+
+    for i, news in enumerate(self.news):
+      if i == config.NEWS_RESUME_LEN:
+        break
+
+      self.player.play("{title} [SLEEP 0.2] {summary}".format(
+          title=news['title'],
+          summary=news['summary']))
 
 
-	def loadNews(self):
-		entries = self.rss['entries']
-		for entry in entries:
-			self.news.append({
-				'title': entry['title'],
-				'summary': entry['summary'],
-				'picture': self.getPicture(entry['links']),
-				'link': entry['link']})
-
-	def getPicture(self, links):
-		for link in links:
-			if 'image' in link['type'].split('/'):
-				return link['href']
-
-		# TODO : Default picture here
-		return None
-
-	def play(self):
-		self.player.play("Résumé des actualités publiés par {}".format(self.title))
-		self.player.wait(1)
-
-		for i, news in enumerate(self.news):
-			if i == config.NEWS_RESUME_LEN:
-				break
-
-			self.player.play("{title} [SLEEP 0.2] {summary}".format(
-				title=news['title'],
-				summary=news['summary']))

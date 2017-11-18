@@ -7,54 +7,57 @@ from .view import View
 
 import app.api
 
+
 class MyDailyNews():
-	"""Free your mind :)"""
-	def __init__(self, location="Nice"):
-		super(MyDailyNews, self).__init__()
-		self.__location = location
+  """Free your mind :)"""
 
-		self.news = None
-		self.weather = None
-		self.view = None
+  def __init__(self, location="Nice"):
+    super(MyDailyNews, self).__init__()
+    self.__location = location
 
-	def getWeather(self):
-		self.weather = Weather()
-		self.weather.getWeather(self.__location)
+    self.news = None
+    self.weather = None
+    self.view = None
 
-	def getNews(self):
-		self.news = News()
-		self.news.getNews()
+  def getWeather(self):
+    self.weather = Weather()
+    self.weather.getWeather(self.__location)
 
-	def printWeather(self, index=0):
-		self.weather.printWeather(index)
+  def getNews(self):
+    self.news = News()
+    self.news.getNews()
 
-	def play(self):
-		if self.weather is not None:
-			self.weather.play()
-		if self.news is not None:
-			self.news.play()
+  def printWeather(self, index=0):
+    self.weather.printWeather(index)
 
-	def echo(self):
-		if self.weather is not None:
-			self.weather.printWeather()
-		if self.news is not None:
-			self.news.printNews()
+  def play(self):
+    if self.weather is not None:
+      self.weather.play()
+    if self.news is not None:
+      self.news.play()
 
-	def render(self):
-		self.view = View()
+  def echo(self):
+    if self.weather is not None:
+      self.weather.printWeather()
+    if self.news is not None:
+      self.news.printNews()
 
-		self.view.render(data={
-			'weather': self.weather.getData(),
-			'news': self.news.getData(),
-			'var': 'Hello World'})
+  def render(self):
+    self.view = View()
 
-	def run(self):
-		self.getWeather()
-		self.getNews()
-		self.echo()
-		# self.play()
-		self.render()
+    self.view.render(data={
+        'weather': self.weather.getData(),
+        'news': self.news.getData(),
+        'var': 'Hello World'})
+
+  def run(self):
+    self.getWeather()
+    self.getNews()
+    self.echo()
+    # self.play()
+    self.render()
+
 
 def main():
-	myDailyNews = MyDailyNews('Nice')
-	myDailyNews.run()
+  myDailyNews = MyDailyNews('Nice')
+  myDailyNews.run()

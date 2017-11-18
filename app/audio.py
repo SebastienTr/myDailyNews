@@ -7,54 +7,54 @@ import parse
 import config
 import subprocess
 
+
 class Player:
     class __Player:
         def __init__(self):
-        	self.os = sys.platform
-        	self.lang = config.LANGUAGE_VOICE
+            self.os = sys.platform
+            self.lang = config.LANGUAGE_VOICE
 
         def __str__(self):
             return repr(self) + self.val
 
         def play(self, sentance):
-        	try:
-	        	sentances = parse.parse("{} [SLEEP {}] {}", sentance)
-	        except:
-	        	sentances = None
+            try:
+                sentances = parse.parse("{} [SLEEP {}] {}", sentance)
+            except:
+                sentances = None
 
-        	if sentances is not None:
-        		still = True
-        		while (still):
-        			s1 = sentances[0]
-        			wait = float(sentances[1])
-        			s2 = sentances[2]
+            if sentances is not None:
+                still = True
+                while (still):
+                    s1 = sentances[0]
+                    wait = float(sentances[1])
+                    s2 = sentances[2]
 
-        			self._play(s1)
-        			self.wait(wait)
+                    self._play(s1)
+                    self.wait(wait)
 
-        			try:
-	        			sentances = parse.parse("{} [SLEEP {}] {}", s2)
-	        		except:
-	        			sentances = None
+                    try:
+                        sentances = parse.parse("{} [SLEEP {}] {}", s2)
+                    except:
+                        sentances = None
 
-        			if sentances is None:
-        				self._play(s2)
-        				still = False
+                    if sentances is None:
+                        self._play(s2)
+                        still = False
 
-        	else:
-        		self._play(sentance)
+            else:
+                self._play(sentance)
 
         def _play(self, sentance):
-        	print ("play sentance : %s" % sentance)
+            print ("play sentance : %s" % sentance)
 
-        	if self.os == "darwin":
-        		subprocess.call(["say","-v", self.lang, sentance])
+            if self.os == "darwin":
+                subprocess.call(["say", "-v", self.lang, sentance])
 
         @staticmethod
         def wait(sec):
-        	# print ("Wait %f sec" % sec)
-        	time.sleep(sec)
-
+            # print ("Wait %f sec" % sec)
+            time.sleep(sec)
 
     instance = None
 

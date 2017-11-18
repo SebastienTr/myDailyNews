@@ -9,6 +9,7 @@ import random
 
 from jinja2 import Template
 
+
 class View:
     class __View:
         def __init__(self):

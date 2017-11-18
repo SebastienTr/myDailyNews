@@ -11,10 +11,14 @@ NEWS_WEBSITES = {
 		'url': 'http://www.lemonde.fr/rss/une.xml',
 		'type': 'International',
 	},
-	'Nice Matin': {
-		'url': 'http://www.nicematin.com/ville/nice/rss',
-		'type': 'Local'
-	},
+	# 'Nice Matin': {
+	# 	'url': 'http://www.nicematin.com/ville/nice/rss',
+	# 	'type': 'Local',
+	# },
+	'BFMTV': {
+		'url': 'http://www.bfmtv.com/rss/info/flux-rss/flux-toutes-les-actualites/',
+		'type': 'International',
+	}
 }
 NEWS_RESUME_LEN = 3
 

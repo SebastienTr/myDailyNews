@@ -6,6 +6,9 @@ import feedparser
 
 from .audio import Player
 
+# TODO Un peux lours a loader pour si peux
+from bs4 import BeautifulSoup
+
 class News:
 	"""docstring for News"""
 	def __init__(self):
@@ -93,11 +96,13 @@ class Website:
 			if i == config.NEWS_RESUME_LEN:
 				break
 
-			print ('...', news['picture'])
-
+			# Extract pictures from the summary
+			summary_soup = BeautifulSoup(news['summary'])
+			for div in summary_soup.find_all("img"): 
+				div.decompose()
 			data['content'].append({
 				'title': news['title'],
-				'summary': news['summary'],
+				'summary': str(summary_soup),
 				'link': news['link'],
 				'picture': news['picture'],
 			})

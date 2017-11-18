@@ -23,7 +23,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
       <div class="container">
-        <a class="navbar-brand" href="#">Start Bootstrap</a>
+        <a class="navbar-brand" href="#">My Daily News</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -48,26 +48,25 @@
       </div>
     </nav>
 
-    <!-- Page Content -->
-    <div class="container" style='padding-top: 50px'>
 
-      <div class="container">
-        <!-- Introduction Row -->
-        <div class="row">
+    <div class="container" style='padding-top: 50px'>
+      <div class="row">
+        <div class="col">
+          <div class="row">
           <h1>
-            <small>My Daily News</small>
+            <small>{{ weather.head_str }}</small>
           </h1>
-        </div>
-        <div class="row">
-          <div class="col">
-            <p>{{ weather.head_str }}<br/>
-            {{ weather.condition_str }}<br/>
-            {{ weather.temperature_str }}</p>
           </div>
-          <div class="col">
+          <div class="row">
+            <p>
+            {{ weather.condition_str }}<br/>
+            {{ weather.temperature_str }}
+          </p>
+          </div>
+        </div>
+        <div class="col" style='padding-top: 30px'>
             {{ weather.frame }}
           </div>
-        </div>
       </div>
 
       <!-- News rows -->

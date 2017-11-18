@@ -34,7 +34,15 @@ class Weather():
 		# Load the html frame
 		response = requests.get(self.frame_url.format(location))
 		soup = BeautifulSoup(response.content, 'lxml')
-		self.frame = soup.body
+		self.frame = str(soup.body)
+
+		# print (self.frame)
+
+		self.frame = self.frame.replace('<body>', '')
+		self.frame = self.frame.replace('</body>', '')
+
+		# print (self.frame)
+		# exit()
 
 	def printWeather(self, index=0):
 		self._weather[index].echo()

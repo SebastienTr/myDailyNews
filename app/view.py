@@ -32,7 +32,7 @@ class View:
             print ('')
             print (data['news'])
             print ('')
-            print (data['news']['Nice Matin'])
+            # print (data['news']['Nice Matin'])
 
             with open(self.destination, "w") as fh:
                 fh.write(str(view))

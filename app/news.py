@@ -93,6 +93,8 @@ class Website:
 			if i == config.NEWS_RESUME_LEN:
 				break
 
+			print ('...', news['picture'])
+
 			data['content'].append({
 				'title': news['title'],
 				'summary': news['summary'],

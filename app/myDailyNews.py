@@ -51,7 +51,7 @@ class MyDailyNews():
 	def run(self):
 		self.getWeather()
 		self.getNews()
-		# self.echo()
+		self.echo()
 		# self.play()
 		self.render()
 

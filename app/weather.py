@@ -12,114 +12,121 @@ from .audio import Player
 # TODO Un peux lours a loader pour si peux
 from bs4 import BeautifulSoup
 
+
 class Weather():
-	"""docstring for Weather"""
-	def __init__(self):
-		super(Weather, self).__init__()
-		self.url = "https://www.prevision-meteo.ch/services/json/{}"
-		self.frame_url = "https://www.prevision-meteo.ch/services/html/{}/horizontal"
-		self.data = ""
+  """docstring for Weather"""
 
-		self._weather = list()
+  def __init__(self):
+    super(Weather, self).__init__()
+    self.url = "https://www.prevision-meteo.ch/services/json/{}"
+    self.frame_url = "https://www.prevision-meteo.ch/services/html/{}/horizontal"
+    self.data = ""
 
-	def getWeather(self, location):
-		# Load the weather datas
-		response = requests.get(self.url.format(location))
-		self.data = response.json()
+    self._weather = list()
 
-		for x in range(0,4):
-			d = self.data['fcst_day_{}'.format(x)]
-			self._weather.append(Day(d, x))
+  def getWeather(self, location):
+    # Load the weather datas
+    response = requests.get(self.url.format(location))
+    self.data = response.json()
 
-		# Load the html frame
-		response = requests.get(self.frame_url.format(location))
-		soup = BeautifulSoup(response.content, 'lxml')
-		self.frame = str(soup.body)
+    for x in range(0, 4):
+      d = self.data['fcst_day_{}'.format(x)]
+      self._weather.append(Day(d, x))
 
-		# print (self.frame)
+    # Load the html frame
+    response = requests.get(self.frame_url.format(location))
+    soup = BeautifulSoup(response.content, 'lxml')
+    self.frame = str(soup.body)
 
-		self.frame = self.frame.replace('<body>', '')
-		self.frame = self.frame.replace('</body>', '')
+    # print (self.frame)
 
-		# print (self.frame)
-		# exit()
+    self.frame = self.frame.replace('<body>', '')
+    self.frame = self.frame.replace('</body>', '')
 
-	def printWeather(self, index=0):
-		self._weather[index].echo()
+    # print (self.frame)
+    # exit()
 
-	def getWeatherString(self, index=0):
-		return self._weather[index].echo(bprint=False)['totalstring']
+  def printWeather(self, index=0):
+    self._weather[index].echo()
 
-	def getData(self, index=0):
-		weather = self._weather[index].echo(bprint=False)
-		weather['frame'] = self.frame
+  def getWeatherString(self, index=0):
+    return self._weather[index].echo(bprint=False)['totalstring']
 
-		return weather
+  def getData(self, index=0):
+    weather = self._weather[index].echo(bprint=False)
+    weather['frame'] = self.frame
 
-	def play(self):
-		self._weather[0].play()
+    return weather
 
-	def __str__(self):
-		return self.indent(self._weather)
+  def play(self):
+    self._weather[0].play()
+
+  def __str__(self):
+    return self.indent(self._weather)
+
 
 class Day:
-	"""docstring for Day"""
-	def __init__(self, data=None, index=0):
-		self.datetime = None
-		self.weather = None
-		self.city = None
-		self.index = index
-		self.player = Player()
+  """docstring for Day"""
 
-		self.day_placement = config.DAY_PLACEMENT[self.index]
+  def __init__(self, data=None, index=0):
+    self.datetime = None
+    self.weather = None
+    self.city = None
+    self.index = index
+    self.player = Player()
 
-		if data is not None:
-			self.load(data)
+    self.day_placement = config.DAY_PLACEMENT[self.index]
 
-	def load(self, data):
-		self.data = data
+    if data is not None:
+      self.load(data)
 
-		self.date = data['date']
-		self.day_long = data['day_long']
-		self.condition = Condition(data['condition'])
-		self.tmin = data['tmin']
-		self.tmax = data['tmax']
-		self.hourly = data['hourly_data']
+  def load(self, data):
+    self.data = data
 
-	def echo(self, bprint=True):
-		head_str = "Météo le {} {}.".format(self.day_long, self.date)
-		condition_str = '{} {}'.format(self.condition, self.day_placement.lower())
-		temperature_str = "La température variera entre {} et {} degrés.".format(self.tmin, self.tmax)
+    self.date = data['date']·
+    self.day_long = data['day_long']
+    self.condition = Condition(data['condition'])
+    self.tmin = data['tmin']
+    self.tmax = data['tmax']
+    self.hourly = data['hourly_data']
 
-		if bprint is True:
-			print ('- {}'.format(head_str))
-			print (condition_str)
-			print (temperature_str)
-			print ("")
+  def echo(self, bprint=True):
+    head_str = "Météo le {} {}.".format(self.day_long, self.date)
+    condition_str = '{} {}'.format(self.condition, self.day_placement.lower())
+    temperature_str = "La température variera entre {} et {} degrés.".format(
+        self.tmin, self.tmax)
 
-		return {
-			'head_str': head_str,
-			'condition_str': condition_str,
-			'temperature_str': temperature_str,
-			'totalstring': '{}{}{}'.format(head_str, condition_str, temperature_str),
-		}
+    if bprint is True:
+      print ('- {}'.format(head_str))
+      print (condition_str)
+      print (temperature_str)
+      print ("")
 
-	def play(self):
-		day = self.echo(bprint=False)
+    return {
+        'head_str': head_str,
+        'condition_str': condition_str,
+        'temperature_str': temperature_str,
+        'totalstring': '{}{}{}'.format(head_str, condition_str, temperature_str),
+    }
 
-		conditions = (day['condition_str'] + " et " + day['temperature_str'])
-		
-		self.player.play("{day} [SLEEP 0.4] {cond}".format(
-			day=day['head_str'],
-			cond=conditions))
-		self.player.wait(2)
+  def play(self):
+    day = self.echo(bprint=False)
+
+    conditions = (day['condition_str'] + " et " + day['temperature_str'])
+
+    self.player.play("{day} [SLEEP 0.4] {cond}".format(
+        day=day['head_str'],
+        cond=conditions))
+    self.player.wait(2)
+
 
 class Condition:
-	"""docstring for Condition"""
-	def __init__(self, condition=None):
-		if condition is not None:
-			self.condition = condition
-			self.str = config.CONDITIONS[condition]
+  """docstring for Condition"""
 
-	def __str__(self):
-		return self.str
+  def __init__(self, condition=None):
+    if condition is not None:
+      self.condition = condition
+      self.str = config.CONDITIONS[condition]
+
+  def __str__(self):
+    return self.str

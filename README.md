@@ -9,3 +9,8 @@ Tous les matins, lancez myDailyNews pour avoir un résumé des informations qu'i
 - Image du jour / heure 
 - Génération d'un visuel
 - Génération d'un audio
+
+Background web page Aerial videos (is it opensource ?)
+http://a1.phobos.apple.com/us/r1000/000/Features/atv/AutumnResources/videos/entries.json
+
+https://pythonprogramminglanguage.com/speech-recognition/

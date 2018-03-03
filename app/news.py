@@ -68,9 +68,10 @@ class Website:
     self.rss = feedparser.parse(self.url)
 
   def getNews(self):
-    print (self.rss)
+    pass
+    # print (self.rss)
 
-  def echo(self, bprint=True):
+  def echo(self, bprint=False):
     head_str = self.getHeadStr()
 
     if bprint is True:
@@ -92,7 +93,7 @@ class Website:
 
   def getData(self):
     data = {
-        'head_str': self.getHeadStr(),
+        'headtitle': self.getHeadStr(),
         'content': list()
     }
 
@@ -101,7 +102,7 @@ class Website:
         break
 
       # Extract pictures from the summary
-      summary_soup = BeautifulSoup(news['summary'])
+      summary_soup = BeautifulSoup(news['summary'], "lxml")
       for div in summary_soup.find_all("img"):
         div.decompose()
       data['content'].append({

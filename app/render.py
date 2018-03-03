@@ -1,21 +1,18 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import sys
-import time
-import parse
-import config
-import subprocess
+class MDNRender():
+	"""docstring for MDNRender"""
+	_instance = None
+	def __new__(self, *args, **kwargs):
+			if not self._instance:
+					self._instance = super(MDNRender, self).__new__(self, *args, **kwargs)
+			return self._instance
 
-class Player:
-    class __Player():
-        def __init__(self):
-            self.os = sys.platform
-            self.lang = config.LANGUAGE_VOICE
+	def __init__(self):
+		pass
 
-        def __str__(self):
-            return repr(self) + self.val
-
+class Player(MDNRender):
     def play(self, sentance):
         try:
             sentances = parse.parse("{} [SLEEP {}] {}", sentance)
@@ -54,12 +51,3 @@ class Player:
     def wait(sec):
         # print ("Wait %f sec" % sec)
         time.sleep(sec)
-
-    instance = None
-
-    def __init__(self):
-        if not Player.instance:
-            Player.instance = Player.__Player()
-
-    def __getattr__(self, name):
-        return getattr(self.instance, name)

@@ -83,7 +83,7 @@ class Day:
   def load(self, data):
     self.data = data
 
-    self.date = data['date']·
+    self.date = data['date']
     self.day_long = data['day_long']
     self.condition = Condition(data['condition'])
     self.tmin = data['tmin']

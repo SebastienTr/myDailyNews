@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Round About - Start Bootstrap Template</title>
+    <title>My Daily News</title>
 
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -49,12 +49,12 @@
     </nav>
 
 
-    <div class="container" style='padding-top: 50px'>
+    <div class="container" style='padding-top: 55px'>
       <div class="row">
         <div class="col">
           <div class="row">
           <h1>
-            <small>{{ weather.head_str }}</small>
+            {{ weather.head_str }}
           </h1>
           </div>
           <div class="row">
@@ -67,6 +67,14 @@
         <div class="col" style='padding-top: 30px'>
             {{ weather.frame }}
           </div>
+      </div>
+      <div class="row">
+        <h1>
+          Citation du jour
+        </h1>
+      </div>
+      <div class="row">
+        {{ quote }}
       </div>
 
       <!-- News rows -->

@@ -11,18 +11,20 @@ NEWS_WEBSITES = {
 		'url': 'http://www.lemonde.fr/rss/une.xml',
 		'type': 'International',
 	},
+	'BFMTV': {
+		'url': 'http://www.bfmtv.com/rss/info/flux-rss/flux-toutes-les-actualites/',
+		'type': 'International',
+	},
 	# 'Nice Matin': {
 	# 	'url': 'http://www.nicematin.com/ville/nice/rss',
 	# 	'type': 'Local',
 	# },
-	'BFMTV': {
-		'url': 'http://www.bfmtv.com/rss/info/flux-rss/flux-toutes-les-actualites/',
-		'type': 'International',
-	}
 }
 NEWS_RESUME_LEN = 3
 
 OUTPUT_VIEW_PATH = "browser/chrome/MyDailyNews/index.html"
+
+AERIAL_URL = "http://a1.phobos.apple.com/us/r1000/000/Features/atv/AutumnResources/videos/entries.json"
 
 # =====================
 # Translations settings

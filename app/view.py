@@ -27,13 +27,8 @@ class View:
                 name='John Doe',
                 random_background=self.getRandom(),
                 weather=data['weather'],
-                news=data['news'])
-
-            print (data['weather'])
-            print ('')
-            print (data['news'])
-            print ('')
-            # print (data['news']['Nice Matin'])
+                news=data['news'],
+                quote=data['quote'])
 
             with open(self.destination, "w") as fh:
                 fh.write(str(view))

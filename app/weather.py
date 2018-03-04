@@ -92,6 +92,8 @@ class Day:
 
   def echo(self, bprint=True):
     head_str = "Météo le {} {}.".format(self.day_long, self.date)
+
+    # Format the string with DAY_PLACEMENT config
     condition_str = '{} {}'.format(self.condition, self.day_placement.lower())
     temperature_str = "La température variera entre {} et {} degrés.".format(
         self.tmin, self.tmax)
